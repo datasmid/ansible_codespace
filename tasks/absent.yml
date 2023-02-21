@@ -1,0 +1,14 @@
+# Tasks to reach desired_state: absent
+---
+- name: Flush handlers
+  ansible.builtin.meta: flush_handlers
+
+- name: Remove package
+  ansible.builtin.package:
+    name: "{{ package }}"
+    state: absent
+
+- name: Remove documents
+  ansible.builtin.file:
+    path: "{{ webroot }}"
+    state: absent

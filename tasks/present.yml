@@ -1,0 +1,31 @@
+# Tasks to reach desired_state: present
+---
+- name: Manage package
+  ansible.builtin.package:
+    name: "{{ package }}"
+    state: "{{ desired_state }}"
+    update_cache: true
+  notify: Control service
+
+- name: Enable service
+  ansible.builtin.systemd:
+    name: "{{ service }}"
+    enabled: true
+    daemon_reload: true
+  notify: Control service
+
+- name: Ensure webroot exists
+  ansible.builtin.file:
+    path: "{{ webroot }}"
+    state: directory
+    owner: root
+    group: root
+    mode: '0755'
+
+- name: Install homepage
+  ansible.builtin.template:
+    src: index.html.j2
+    dest: "{{ webroot }}/index.html"
+    owner: root
+    group: root
+    mode: '0644'
